@@ -1,10 +1,10 @@
 $(document).ready(function() {
     var self = $("#showselfname")[0].innerText.trim();
-    console.log(self)
+    // console.log(self)
 
     var socket = io.connect();
     socket.emit('login', {
-        username: self
+        'username': self
     })
 
     function upArr(array) {
@@ -33,8 +33,8 @@ $(document).ready(function() {
 
         var touser = $(this).children('.userlist_name')[0].innerText;
         socket.emit('newRoom', {
-            from: self,
-            to: touser
+            'from': self,
+            'to': touser
         })
         $("#touser").html(touser);
         $("#showMsg").html('');
@@ -47,15 +47,72 @@ $(document).ready(function() {
             now_chat_list.splice(0, 1);
         };
         // console.log(now_chat_list);
+        var msg = '';
         $("#send").on('click', function() {
-            var msg = $("#msg").val();
-            socket.emit('getMsg', {
-                from: self,
-                content: msg,
-                to: $("#touser").text()
+                msg = $("#msg").val();
+                send_msg(msg);
+
             })
+            // 点击后发送图片，隐藏预览
+        $("#sendImg").on('click', function() {
+            msg = $("#preview").attr("src");
+            $("#previewBox").hide();
+            // console.log(msg)
+
+            send_img(msg);
+
+        })
+        $("#msg").on('keydown', function(e) {
+            msg = $("#msg").val();
+
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                send_msg(msg)
+            };
         })
     });
+
+    function send_img(src) {
+        if (src != '') {
+
+            socket.emit('getMsg', {
+                'flag': 'img',
+                'from': self,
+                'content': src,
+                'to': $("#touser").text()
+            })
+        };
+    }
+
+    function send_msg(msg) {
+        if (msg.trim() != '') {
+
+            socket.emit('getMsg', {
+                'flag': 'word',
+                'from': self,
+                'content': msg,
+                to: $("#touser").text()
+            })
+        };
+        $("#msg").val('').blur();
+    }
+
+    function replace_em(str) { // 匹配表情字符
+        str = str.replace(/\</g, '&lt;');
+        str = str.replace(/\>/g, '&gt;');
+        str = str.replace(/\n/g, '<br/>');
+        str = str.replace(/\[em_([0-9]*)\]/g, '<img src="images/face/$1.gif" border="0" />');
+        return str;
+    }
+    $('#emotion').qqFace({ //表情转换
+        'id': 'facebox', //表情盒子的ID
+        'assign': 'msg', //给那个控件赋值
+        'path': 'images/face/' //表情存放的路径
+    });
+    $("#msg").blur(function() {
+        $("#facebox").css("display", "none");
+    })
+
 
     $(".back").on('click', function() {
         now_chat_list.pop();
@@ -67,47 +124,47 @@ $(document).ready(function() {
 
 
     });
-    socket.on('getChat', function(data, listRoom) { //如果广播到用户包含自己，则匹配聊天
-            console.log(data)
+    // socket.on('getChat', function(data, listRoom) { //如果广播到用户包含自己，则匹配聊天
+    //         console.log(data)
+    //     })
+    /*$("#send").on('click', function() {
+        var msg = $("#msg").val();
+        socket.emit('getMsg', {
+            from: self,
+            content: msg,
+            to: $("#touser").text()
         })
-        /*$("#send").on('click', function() {
-            var msg = $("#msg").val();
-            socket.emit('getMsg', {
-                from: self,
-                content: msg,
-                to: $("#touser").text()
-            })
-        })*/
+    })*/
     socket.on('getMsg', function(newObj) {
             console.log(newObj)
+            var isW = (newObj.flag === 'word') ? true : false;
 
-            var newContent = newObj.content;
+            var newContent = replace_em(newObj.content);
             var isme = (newObj.fromName === self) ? true : false;
             var isto = (newObj.fromName === $("#touser").text()) ? true : false;
-            var contentDiv = '<div>' + newContent + '</div>';
+            var contentDiv = '';
+            if (isW) {
+                contentDiv = '<div>' + newContent + '</div>';
+            }else{
+contentDiv = '<div>' + '<img src="'+ newContent +'"/>' + '</div>'
+            };
             var usernameDiv = '';
-            console.log(isto)
-
             var section = $('<section class="clearfix"></section>');
             if (isme) {
                 usernameDiv = '<span>' + newObj.fromName + '</span>';
                 section.addClass('user');
                 section.html(contentDiv + usernameDiv);
             } else {
-                if (isto) {
-                    usernameDiv = '<span>' + newObj.fromName + '</span>';
-                    section.addClass('service');
-                    section.html(usernameDiv + contentDiv);
-                } else {
+                if (!isto) {
                     if ($(".chat").hide) {
                         $(".chat").show();
                     };
                     $("#touser").html(newObj.fromName);
                     $("#showMsg").html('');
-                    usernameDiv = '<span>' + newObj.fromName + '</span>';
-                    section.addClass('service');
-                    section.html(usernameDiv + contentDiv);
                 };
+                usernameDiv = '<span>' + newObj.fromName + '</span>';
+                section.addClass('service');
+                section.html(usernameDiv + contentDiv);
             };
             $("#showMsg").append(section)
             scrollBottom();
@@ -123,5 +180,62 @@ $(document).ready(function() {
         var h = $("#showMsg")[0].scrollHeight
         $("#showMsg").scrollTop(h)
     }
+    var winH = $(".container").innerHeight();
+    $("#img").on('click', function() {
+            $("#photo").trigger('click');
+        })
+        // 选择图片并预览
+    $("#photo").on('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#preview").attr("src", this.result);
+                $("#preview").css("width", winH + 'px');
+                $("#previewBox").hide().stop().fadeIn();
+                $("#preview").on('click', function() {
+                    $("#previewBox").hide();
+                })
+            }
+            reader.readAsDataURL(this.files[0])
 
+        })
+        /*$("#photo").on('change', function() {
+                var files = $("#photo")[0].files;
+                for (var i = 0; i < files.length; i++) {
+
+                    console.log(
+                        files[i])
+                    console.log(
+                        files[i].lastModifiedDate.toLocaleDateString());
+                    console.log(
+                        files[i].lastModifiedDate.toLocaleTimeString());
+                    console.log((files[i].size / 1024).toFixed(2));
+
+
+
+
+                }
+            })*/
+        // console.log(file)
+
+
+    // 点击发送后的图片查看
+    $("body").delegate('.check', 'click', function() {
+            var img = $(this).attr("src");
+            $("#check").attr("src", img)
+            $("#scan").show().click(function() {
+                $(this).hide();
+            })
+        })
+        // 全屏预览图片
+    var fullPage = document.querySelector('button.btn');
+    fullPage.addEventListener('click', function() {
+        var elem = document.querySelector('#preview');
+        if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.requestFullScreen) {
+            elem.requestFullScreen();
+        }
+    });
 });

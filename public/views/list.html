@@ -9,7 +9,7 @@
     <meta http-equiv="cache-control" content="public">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>Miko的随机聊天室 QQ452753617</title>
+    <title>CChat</title>
     <link rel="stylesheet" type="text/css" href="/plug/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/list.css" />
     <!--[if lt IE 8]><script src="./json3.min.js"></script><![endif]-->
@@ -50,24 +50,26 @@
                         </div>
                         <div class="text">
                             <textarea id="msg" name="msg"></textarea>
-                            <div class="banner clearfix">
+                            <div class="banner">
                                 <span class="emotion" id="emotion"></span>
-                                <!-- <input type="file" accept="image/*;capture=camera" id="photo"> -->
                                 <span class=" img" id="img"></span>
+                                <input type="file" accept="image/*;capture=camera" id="photo">
                                 <a href="javascript:;" class="btn btn-primary" id="send">发送</a>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="pop" id="previewBox">
-                        <img src="" id="preview">
-                        <a href="javascript:;" class="send" id="sendImg">发送</a>
-                    </div> -->
-                    <!-- <div class="pop" id="scan">
-                            <img src="" class="ab-center" id="check"> -->
                 </div>
             </div>
+            <div class="pop" id="previewBox">
+                <img src="" id="preview">
+                <a href="javascript:;" class="btn btn-primary" id="sendImg">发送</a>
+                <button class="btn btn-primary">123</button>
+            </div>
+            <div class="pop" id="scan">
+                <img src="" class="ab-center" id="check">
+                <button class="btn btn-primary">123</button>
+            </div>
         </div>
-    </div>
 </body>
 <script type="text/javascript" src="/javascript/client.js"></script>
 

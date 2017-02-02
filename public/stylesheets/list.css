@@ -42,7 +42,7 @@ li {
 .container .chat_header {
   width: 100%;
   height: 50px;
-  background-color: #4e5053;
+  background-color: #2e3028;
   border-bottom: 2px solid #808a96;
   position: fixed;
   top: 0;
@@ -78,7 +78,7 @@ li {
   font: 600 18px/50px '黑体';
 }
 .container #chat_list ul.list li.user_id {
-  background-color: #4e5053;
+  background-color: #2e3028;
   box-shadow: 0 0 6px #777 inset, 0 0 6px #777;
   box-sizing: border-box;
   display: block;
@@ -128,13 +128,15 @@ li {
   top: 50px;
   margin: 10px;
   border: 1px solid #ccc;
+  border-radius: 10px;
 }
 .container .chat .chat_box .chat_box_header {
+  border-radius: 10px 10px 0 0;
   position: absolute;
   top: 0;
   width: 100%;
   height: 50px;
-  background-color: #4e5053;
+  background-color: #2e3028;
   box-shadow: 0 5px 15px #888;
   z-index: 8;
 }
@@ -199,7 +201,7 @@ li {
   float: left;
 }
 .container .chat .chat_box #showMsg section > div {
-  max-width: 225px;
+  max-width: 70%;
   display: inline-block;
   position: relative;
   padding: 12px;
@@ -209,6 +211,9 @@ li {
   box-shadow: inset 0 0 1px #000;
   vertical-align: top;
   word-break: break-all;
+}
+.container .chat .chat_box #showMsg section > div img {
+  width: 100%;
 }
 .container .chat .chat_box #showMsg section.service > div:before {
   content: "";
@@ -269,6 +274,9 @@ li {
   margin: 0 auto;
   text-align: center;
 }
+.container .chat .chat_box .text .banner #photo {
+  display: none;
+}
 .container .chat .chat_box .text .banner a.btn {
   float: right;
   margin: 10px;
@@ -292,4 +300,36 @@ li {
 }
 .container .chat .chat_box .text .banner span.img {
   background: url('/images/img.png');
+}
+.container .pop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  z-index: 20;
+}
+.container .pop img {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+}
+.container .pop a {
+  position: fixed;
+  top: 20px;
+  right: 50px;
+}
+.container .pop .ab-center {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
 }

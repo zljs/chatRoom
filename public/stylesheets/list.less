@@ -42,7 +42,7 @@ li {
     zoom: 1;
 }
 
-@color : #4e5053;
+@color : #2e3028;
 .container {
     height: 100%;
     width: 100%;
@@ -140,7 +140,9 @@ li {
             top: 50px;
             margin: 10px;
             border: 1px solid #ccc;
+            border-radius: 10px;
             .chat_box_header {
+                border-radius: 10px 10px 0 0;
                 position: absolute;
                 top: 0;
                 width: 100%;
@@ -213,7 +215,7 @@ li {
                     float: left;
                 }
                 section>div {
-                    max-width: 225px;
+                    max-width: 70%;
                     display: inline-block;
                     position: relative;
                     padding: 12px;
@@ -223,6 +225,10 @@ li {
                     box-shadow: inset 0 0 1px #000;
                     vertical-align: top;
                     word-break: break-all;
+                    img {
+                        width:100%;
+                        // margin: 0 auto;
+                    }
                 }
                 section.service>div:before {
                     content: "";
@@ -284,6 +290,9 @@ li {
                     // border: 1px solid #ccc;
                     margin: 0 auto;
                     text-align: center;
+                    #photo {
+                        display: none;
+                    }
                     a.btn {
                         float: right;
                         margin: 10px;
@@ -310,6 +319,38 @@ li {
                     }
                 }
             }
+        }
+    }
+    .pop {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        left: 0;
+        top: 0;
+        background: rgba(0, 0, 0, .9);
+        display: none;
+        z-index: 20;
+        img {
+            width: 100%;
+            height:auto;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            -webkit-transform: translateX(-50%) translateY(-50%);
+        }
+        a {
+            position: fixed;
+            top: 20px;
+            right: 50px;
+        }
+        .ab-center {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
         }
     }
 }

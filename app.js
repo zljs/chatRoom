@@ -55,118 +55,123 @@ var onlineCount = 0;
 io.on('connection', function(socket) {
     console.log('新用户已上线！')
 
-    socket.on('login', function(obj) {
-        User.findOne({ name: obj.username }, function(err, self) {
-            // 将新加入用户的唯一标识当作socket的名称
-            socket.name = self.userid;
-            if (!onlineUsers.hasOwnProperty(self.userid)) {
-                onlineUsers[self.userid] = self.name;
+    /*    socket.on('login', function(obj) {
+            User.findOne({ name: obj.username }, function(err, self) {
+                // 将新加入用户的唯一标识当作socket的名称
+                socket.name = self.userid;
+                if (!onlineUsers.hasOwnProperty(self.userid)) {
+                    onlineUsers[self.userid] = self.name;
 
-                //在线人数+1
-                onlineCount++;
-            }
-            // 向所有客户端广播用户加入
-            io.emit('login', {
-                onlineUsers: onlineUsers,
-                onlineCount: onlineCount,
-                user: self.name
-            });
-            console.log(self.name + '加入聊天室');
+                    //在线人数+1
+                    onlineCount++;
+                }
+                // 向所有客户端广播用户加入
+                io.emit('login', {
+                    onlineUsers: onlineUsers,
+                    onlineCount: onlineCount,
+                    user: self.name
+                });
+                console.log(self.name + '加入聊天室');
+            })
         })
-    })
 
-    //监听用户退出
-    socket.on('disconnect', function() {
-        //将退出的用户从在线列表中删除
-        if (onlineUsers.hasOwnProperty(socket.name)) {
-            // 退出用户的信息
-            var obj = {
-                userid: socket.name,
-                username: onlineUsers[socket.name]
+        //监听用户退出
+        socket.on('disconnect', function() {
+            //将退出的用户从在线列表中删除
+            if (onlineUsers.hasOwnProperty(socket.name)) {
+                // 退出用户的信息
+                var obj = {
+                    userid: socket.name,
+                    username: onlineUsers[socket.name]
+                }
+
+                // 删除
+                delete onlineUsers[socket.name]
+                onlineCount--;
+                io.emit('logout', {
+                    onlineUsers: onlineUsers,
+                    onlineCount: onlineCount,
+                    user: obj
+                });
+                console.log(obj.username + '退出了聊天室');
             }
-
-            // 删除
-            delete onlineUsers[socket.name]
-            onlineCount--;
-            io.emit('logout', {
-                onlineUsers: onlineUsers,
-                onlineCount: onlineCount,
-                user: obj
-            });
-            console.log(obj.username + '退出了聊天室');
-        }
-    })
+        })*/
 
     //监听单独连线
     socket.on('newRoom', function(obj) {
-        console.log(obj)
-
-        User.findOne({ name: obj.from }, function(error, from) {
-            User.findOne({ name: obj.to }, function(error, to) {
-                var listRoom = {
-                    fromName: from.name,
-                    fromId: from.userid,
-                    toName: to.name,
-                    targetId: to.userid,
-                }
-                socket.id = from.userid;
-                userServer[from.userid] = socket;
-                listRoom[from.userid] = from.name;
-
-                freeList.push(from.userid)
-                    // io.emit('onlineCount', freeList)
-                    // io.emit('addCount', count)
-                if (freeList.length > 1) {
-                    var fromuser = from.userid;
-                    Arrayremove(freeList, fromuser)
-                    if (freeList.length == 1) {
-                        n = 0
-                    } else {
-                        n = Math.floor(Math.random() * freeList.length)
-                    }
-                    var touser = freeList[n];
-                    Arrayremove(freeList, touser);
-                    // io.emit('getChat', { p1: fromuser, p2: touser }, listRoom);
-                    // io.emit("getChat", { p1: from, p2: to }, userList)
-                }
-            })
-        })
-    })
-// 监听消息收发
-    socket.on('getMsg', function(obj) {
             console.log(obj)
+
             User.findOne({ name: obj.from }, function(error, from) {
                 User.findOne({ name: obj.to }, function(error, to) {
-                    var newObj = {
-                        content: obj.content,
-                        fromName: obj.from
+                    var listRoom = {
+                        'fromName': from.name,
+                        'fromId': from.userid,
+                        'toName': to.name,
+                        'targetId': to.userid,
                     }
-                    if (userServer.hasOwnProperty(from.userid)) {
-                        userServer[from.userid].emit('getMsg', newObj);
-                        console.log(obj.from + '说：' + obj.content);
-                        // console.log(userServer)
-                    } else {
-                        socket.emit("err", { msg: "对方已经下线或者断开连接" })
+                    socket.id = from.userid;
+                    userServer[from.userid] = socket;
+                    listRoom[from.userid] = from.name;
+
+                    freeList.push(from.userid)
+                        // io.emit('onlineCount', freeList)
+                        // io.emit('addCount', count)
+                    if (freeList.length > 1) {
+                        var fromuser = from.userid;
+                        Arrayremove(freeList, fromuser)
+                        if (freeList.length == 1) {
+                            n = 0
+                        } else {
+                            n = Math.floor(Math.random() * freeList.length)
+                        }
+                        var touser = freeList[n];
+                        Arrayremove(freeList, touser);
+                        // io.emit('getChat', { p1: fromuser, p2: touser }, listRoom);
+
                     }
+                })
+            })
+        })
+        // 监听消息收发
+    socket.on('getMsg', function(obj) {
+        console.log(obj.flag)
+        User.findOne({ name: obj.from }, function(error, from) {
+            User.findOne({ name: obj.to }, function(error, to) {
+                var newObj = {
+                    'content': obj.content,
+                    'fromName': obj.from,
+                    'flag':obj.flag
+                }
+                if (userServer.hasOwnProperty(from.userid)) {
+                    userServer[from.userid].emit('getMsg', newObj);
+                    console.log(obj.from + '说：' + obj.content);
+                    // console.log(userServer)
+                } else {
+                    socket.emit("err", { msg: "对方已经下线或者断开连接" })
+                }
+                if (to.userid) {
                     if (userServer.hasOwnProperty(to.userid)) {
                         userServer[to.userid].emit('getMsg', newObj);
                         console.log(obj.to + '说：' + obj.content);
                         // console.log(userServer)
                     } else {
+                        // console.log(err)
+
                         socket.emit("err", { msg: "对方已经下线或者断开连接" })
                     }
-                })
-
+                };
             })
-        })
 
-/*    // 服务器时间同步
-    function tick() {
-        var now = new Date().toUTCString();
-        // console.log(now);
-        io.emit('time', now);
-    }
-    setInterval(tick, 1000);*/
+        })
+    })
+
+    /*    // 服务器时间同步
+        function tick() {
+            var now = new Date().toUTCString();
+            // console.log(now);
+            io.emit('time', now);
+        }
+        setInterval(tick, 1000);*/
 })
 
 function Arrayremove(array, name) {
