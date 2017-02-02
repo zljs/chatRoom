@@ -182,7 +182,7 @@ $(document).ready(function() {
             };
         };
         $("#showMsg").append(section)
-
+scrollBottom()
     })
 
     $("#logout").on('click', function() {
@@ -191,6 +191,10 @@ $(document).ready(function() {
 
     })
 
+    function scrollBottom() { // 接收新消息时，聊天框自动滚到最下方
+        var h = $("#showMsg")[0].scrollHeight
+        $("#showMsg").scrollTop(h)
+    }
 
 
 
