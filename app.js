@@ -126,7 +126,7 @@ io.on('connection', function(socket) {
                     }
                     var touser = freeList[n];
                     Arrayremove(freeList, touser);
-                    io.emit('getChat', { p1: fromuser, p2: touser }, listRoom);
+                    // io.emit('getChat', { p1: fromuser, p2: touser }, listRoom);
                     // io.emit("getChat", { p1: from, p2: to }, userList)
                 }
             })

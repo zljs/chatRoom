@@ -47,7 +47,14 @@ $(document).ready(function() {
             now_chat_list.splice(0, 1);
         };
         // console.log(now_chat_list);
-
+        $("#send").on('click', function() {
+            var msg = $("#msg").val();
+            socket.emit('getMsg', {
+                from: self,
+                content: msg,
+                to: $("#touser").text()
+            })
+        })
     });
 
     $(".back").on('click', function() {
@@ -61,58 +68,51 @@ $(document).ready(function() {
 
     });
     socket.on('getChat', function(data, listRoom) { //如果广播到用户包含自己，则匹配聊天
-        console.log(data)
-
-        /*if (data.p1 == id) {
-            touser = data.p2
-        } else if (data.p2 == id) {
-            touser = data.p1
-        }*/
-
-    })
-    $("#send").on('click', function() {
-        var msg = $("#msg").val();
-        socket.emit('getMsg', {
-            from: self,
-            content: msg,
-            to: $("#touser").text()
+            console.log(data)
         })
-    })
+        /*$("#send").on('click', function() {
+            var msg = $("#msg").val();
+            socket.emit('getMsg', {
+                from: self,
+                content: msg,
+                to: $("#touser").text()
+            })
+        })*/
     socket.on('getMsg', function(newObj) {
-        console.log(newObj)
+            console.log(newObj)
 
-        var newContent = newObj.content;
-        var isme = (newObj.fromName === self) ? true : false;
-        var isto = (newObj.fromName === $("#touser").text()) ? true : false;
-        var contentDiv = '<div>' + newContent + '</div>';
-        var usernameDiv = '';
-        console.log(isto)
+            var newContent = newObj.content;
+            var isme = (newObj.fromName === self) ? true : false;
+            var isto = (newObj.fromName === $("#touser").text()) ? true : false;
+            var contentDiv = '<div>' + newContent + '</div>';
+            var usernameDiv = '';
+            console.log(isto)
 
-        var section = $('<section class="clearfix"></section>');
-        if (isme) {
-            usernameDiv = '<span>' + newObj.fromName + '</span>';
-            section.addClass('user');
-            section.html(contentDiv + usernameDiv);
-        } else {
-            if (isto) {
+            var section = $('<section class="clearfix"></section>');
+            if (isme) {
                 usernameDiv = '<span>' + newObj.fromName + '</span>';
-                section.addClass('service');
-                section.html(usernameDiv + contentDiv);
+                section.addClass('user');
+                section.html(contentDiv + usernameDiv);
             } else {
-                if ($(".chat").hide) {
-                    $(".chat").show();
+                if (isto) {
+                    usernameDiv = '<span>' + newObj.fromName + '</span>';
+                    section.addClass('service');
+                    section.html(usernameDiv + contentDiv);
+                } else {
+                    if ($(".chat").hide) {
+                        $(".chat").show();
+                    };
+                    $("#touser").html(newObj.fromName);
+                    $("#showMsg").html('');
+                    usernameDiv = '<span>' + newObj.fromName + '</span>';
+                    section.addClass('service');
+                    section.html(usernameDiv + contentDiv);
                 };
-                $("#touser").html(newObj.fromName);
-                $("#showMsg").html('');
-                usernameDiv = '<span>' + newObj.fromName + '</span>';
-                section.addClass('service');
-                section.html(usernameDiv + contentDiv);
             };
-        };
-        $("#showMsg").append(section)
-        scrollBottom()
-    })
-
+            $("#showMsg").append(section)
+            scrollBottom();
+        })
+        //退出登录
     $("#logout").on('click', function() {
         location.href = 'login';
         socket.disconnect();

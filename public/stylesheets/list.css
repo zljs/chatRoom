@@ -120,7 +120,6 @@ li {
   left: 0;
   color: #000;
   overflow: hidden;
-  display: none;
 }
 .container .chat .chat_box {
   width: 85%;
@@ -270,21 +269,14 @@ li {
   margin: 0 auto;
   text-align: center;
 }
-.container .chat .chat_box .text .banner a.send {
+.container .chat .chat_box .text .banner a.btn {
   float: right;
-  display: inline-block;
-  width: 50px;
-  height: 30px;
   margin: 10px;
-  text-align: center;
-  line-height: 30px;
-  color: #fff;
-  font: 700 18px/30px '黑体';
-  background-color: #4e5053;
+  font: 700 16px/20px '黑体';
   text-decoration: none;
   border-radius: 5px;
 }
-.container .chat .chat_box .text .banner a.send:hover {
+.container .chat .chat_box .text .banner a.btn:hover {
   background-color: #204f96;
 }
 .container .chat .chat_box .text .banner span {
