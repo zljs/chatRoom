@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>用户登录</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/plug/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css" />
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div id="loginbox">
+        <form action="#" method="post">
+            <div class="login-box">
+                <div class="topic">用户登录</div>
+                <div class="form-group">
+                    <input type="text" placeholder="请输入用户名" id="username" name="username" maxlength='20' />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="请输入密码" id="password" name="password" maxlength='16' />
+                </div>
+                <div class="form-group">
+                    <input type="button" class="btn" id="loginbtn" value="登录" />
+                </div>
+                <div class="form-group">
+                    <a href="register" class="btn btn-primary">注 册</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<script type="text/javascript" src="/plug/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+function login() {
+    var name = $('#username').val(),
+        password = $('#password').val();
+
+    var data = {
+        "uname": name,
+        "upwd": password
+    };
+    $.ajax({
+        url: '/login',
+        type: 'POST',
+        data: data,
+        success: function(data, status) {
+            if (status == 'success') {
+                location.href = 'list';
+            }
+        },
+        error: function(data, status) {
+            if (status == "error") {
+                location.href = 'login'
+                // console.log(data)
+                // console.log(status)
+
+
+
+            }
+        }
+    });
+}
+
+$("#loginbtn").on('click', function() {
+    login();
+});
+</script>
+
+</html>

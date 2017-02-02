@@ -1,0 +1,76 @@
+@charset "UTF-8";
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#loginbox {
+    display: block;
+    width: 400px;
+    height: auto;
+    border: 1px solid #ccc;
+    margin: 100px auto;
+    /*position: relative;*/
+}
+
+.topic {
+    width: 100%;
+    height: 40px;
+    font: 600 20px/40px '宋体';
+    box-sizing: border-box;
+    padding: 0 20px;
+    background-color: rgba(204, 204, 204, .5);
+}
+
+#loginbox .form-group {
+    margin: 5px auto;
+    width: 80%;
+    height: 60px;
+    position: relative;
+    text-align: center;
+    line-height: 60px;
+    font: 500 18px/60px 'microsoft yahei';
+    /*background-color: red;*/
+}
+
+#loginbox .form-group input {
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+    outline: none;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    /*margin: 0 auto;*/
+}
+
+#loginbox input.btn {
+    font-size: 18px;
+    font-family: '宋体';
+    font-weight: 600;
+    border: none;
+    background-color: rgba(92, 184, 92, .7);
+    cursor: pointer;
+    color: #fff;
+
+}
+
+#loginbox .form-group input#loginbtn:hover {
+    background-color: rgba(92, 184, 92, 1);
+}
+
+#loginbox .form-group a.btn {
+    float: right;
+}
+.clearfix:before, .container:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+/* IE 6/7 */
+.clearfix { zoom: 1; }
+

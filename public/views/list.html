@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=0" name="viewport">
+    <meta http-equiv="cache-control" content="public">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>Miko的随机聊天室 QQ452753617</title>
+    <link rel="stylesheet" type="text/css" href="/plug/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/list.css" />
+    <!--[if lt IE 8]><script src="./json3.min.js"></script><![endif]-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/plug/jquery/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/javascript/jquery.qqFace.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row ">
+            <div class="chat_header ">
+                <span class="chatuser"><span id="showselfname">
+                            <%=Users.selfName%>
+                    </span> |
+                <a href="javascript:;" id="logout">退出</a></span>
+            </div>
+            <div id="chat_list" class="col-sm-3">
+                <ul class="list">
+                    <%for(var i in Users.nameList){
+                    if(!Users.nameList[i].name)continue;
+                    if(Users.nameList[i].name==Users.selfName)continue;%>
+                        <li class="user_id">
+                            <span class="userlist_name">
+                            <%=Users.nameList[i].name%></span><span class="more">...</span>
+                        </li>
+                        <%}%>
+                </ul>
+            </div>
+            <div class="chat col-sm-8 col-sm-offset-4">
+                <div class="chat_box">
+                    <div class="chat_box_header clearfix">
+                        <a href="javascript:;" class="back"><span>‹</span>返回</a>
+                        <h3 id="touser"></h3>
+                    </div>
+                    <div id="content">
+                        <div id="showMsg">
+                        </div>
+                        <div class="text">
+                            <textarea id="msg" name="msg"></textarea>
+                            <div class="banner clearfix">
+                                <span class="emotion" id="emotion"></span>
+                                <!-- <input type="file" accept="image/*;capture=camera" id="photo"> -->
+                                <span class=" img" id="img"></span>
+                                <a href="javascript:;" class="send" id="send">发送</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="pop" id="previewBox">
+                        <img src="" id="preview">
+                        <a href="javascript:;" class="send" id="sendImg">发送</a>
+                    </div> -->
+                    <!-- <div class="pop" id="scan">
+                            <img src="" class="ab-center" id="check"> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+$(document).ready(function() {
+    var self = $("#showselfname")[0].innerText.trim();
+    console.log(self)
+
+    var socket = io.connect();
+    socket.emit('login', {
+        username: self
+    })
+
+    function upArr(array) {
+        for (let i in array) {
+            for (let j in array) {
+                if (i != j) {
+                    if (array[i] == array[j]) {
+                        array.splice(i, 1);
+                        break;
+                    }
+                };
+            }
+        }
+    }
+    // 监听用户登录
+
+    var now_chat_list = [];
+    $('li').on('dblclick', function() {
+        /* socket.on('login', function(o) {
+             console.log(o);
+         });*/
+
+        if ($(".chat").hide) {
+            $(".chat").show();
+        };
+
+        var touser = $(this).children('.userlist_name')[0].innerText;
+        socket.emit('newRoom', {
+            from: self,
+            to: touser
+        })
+        $("#touser").html(touser);
+        $("#showMsg").html('');
+
+        now_chat_list.push(touser);
+
+        upArr(now_chat_list);
+
+        if (now_chat_list.length > 5) {
+            now_chat_list.splice(0, 1);
+        };
+        // console.log(now_chat_list);
+
+    });
+
+    $(".back").on('click', function() {
+        now_chat_list.pop();
+        $("#touser").html(now_chat_list[now_chat_list.length - 1]);
+        if (now_chat_list.length == 0) {
+            $(".chat").hide();
+        };
+        // console.log(now_chat_list);
+
+
+    });
+    socket.on('getChat', function(data, listRoom) { //如果广播到用户包含自己，则匹配聊天
+        console.log(data)
+
+        /*if (data.p1 == id) {
+            touser = data.p2
+        } else if (data.p2 == id) {
+            touser = data.p1
+        }*/
+
+    })
+    $("#send").on('click', function() {
+        var msg = $("#msg").val();
+        socket.emit('getMsg', {
+            from: self,
+            content: msg,
+            to: $("#touser").text()
+        })
+    })
+    socket.on('getMsg', function(newObj) {
+        console.log(newObj)
+
+        var newContent = newObj.content;
+        var isme = (newObj.fromName === self) ? true : false;
+        var isto = (newObj.fromName === $("#touser").text()) ? true : false;
+        var contentDiv = '<div>' + newContent + '</div>';
+        var usernameDiv = '';
+        console.log(isto)
+
+        var section = $('<section class="clearfix"></section>');
+        if (isme) {
+            usernameDiv = '<span>' + newObj.fromName + '</span>';
+            section.addClass('user');
+            section.html(contentDiv + usernameDiv);
+        } else {
+            if (isto) {
+                usernameDiv = '<span>' + newObj.fromName + '</span>';
+                section.addClass('service');
+                section.html(usernameDiv + contentDiv);
+            } else {
+                if ($(".chat").hide) {
+                    $(".chat").show();
+                };
+                $("#touser").html(newObj.fromName);
+                $("#showMsg").html('');
+                usernameDiv = '<span>' + newObj.fromName + '</span>';
+                section.addClass('service');
+                section.html(usernameDiv + contentDiv);
+            };
+        };
+        $("#showMsg").append(section)
+
+    })
+
+    $("#logout").on('click', function() {
+        location.href = 'login';
+        socket.disconnect();
+
+    })
+
+
+
+
+
+
+
+
+});
+</script>
+
+</html>
