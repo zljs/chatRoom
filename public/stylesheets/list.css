@@ -212,7 +212,7 @@ li {
   vertical-align: top;
   word-break: break-all;
 }
-.container .chat .chat_box #showMsg section > div img {
+.container .chat .chat_box #showMsg section > div img.chek {
   width: 100%;
 }
 .container .chat .chat_box #showMsg section.service > div:before {
@@ -288,7 +288,7 @@ li {
   background-color: #204f96;
 }
 .container .chat .chat_box .text .banner #facebox {
-  width: 100%;
+  width: auto;
   background: #fff;
 }
 .container .chat .chat_box .text .banner span {
