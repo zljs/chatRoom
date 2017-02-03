@@ -90,12 +90,10 @@ li {
 .container #chat_list ul.list li.user_id {
   background-color: #cbdae4;
   box-shadow: 0 0 6px #777 inset, 0 0 6px #777;
-  box-sizing: border-box;
   display: block;
   width: 100%;
   height: 50px;
-  padding: 0 0 0 30px;
-  border-bottom: 2px solid #808a96;
+  line-height: 50px;
   position: relative;
   cursor: pointer;
 }
@@ -104,10 +102,9 @@ li {
   color: #fff;
 }
 .container #chat_list ul.list li.user_id span.userlist_name {
-  float: left;
-}
-.container #chat_list ul.list li.user_id span.more {
-  float: right;
+  display: inline-block;
+  height: 100%;
+  line-height: 50px;
 }
 .container #chat_list ul.list li.user_id::before {
   content: '.';
@@ -131,12 +128,21 @@ li {
   color: #000;
   overflow: hidden;
 }
+.container .chat .chat_box_old {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  margin: 10px;
+}
+.container .chat .chat_box_new {
+  position: fixed;
+  margin: 0;
+  top: 0;
+  left: 0;
+}
 .container .chat .chat_box {
   width: 85%;
   height: 90%;
-  position: absolute;
-  top: 50px;
-  margin: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #cbdae4;
@@ -161,12 +167,39 @@ li {
   float: left;
   display: block;
   height: 50px;
+  line-height: 50px;
 }
 .container .chat .chat_box .chat_box_header a.back span {
   font-size: 30px;
 }
 .container .chat .chat_box .chat_box_header h3#touser {
   color: #216ea3;
+  display: inline-block;
+}
+.container .chat .chat_box .chat_box_header a#biggest {
+  display: inline-block;
+  margin: 0 10px;
+  float: right;
+  width: 40px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+}
+.container .chat .chat_box .chat_box_header a#biggest:hover {
+  background-color: #abb6be;
+}
+.container .chat .chat_box .chat_box_header a#biggest span {
+  display: inline-block;
+  margin: 0 auto;
+  line-height: 100%;
+  width: 20px;
+  height: 15px;
+  border: 2px solid #555;
+  -webkit-transition: all .4s linear;
+  -moz-transition: all .4s linear;
+  -ms-transition: all .4s linear;
+  -o-transition: all .4s linear;
+  transition: all .4s linear;
 }
 .container .chat .chat_box #content {
   z-index: 0;

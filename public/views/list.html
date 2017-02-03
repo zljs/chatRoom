@@ -30,22 +30,23 @@
                 <span class="github"><a href="javascript:;" id="github">GitHub</a></span>
             </div>
             <div id="chat_list" class="col-sm-3">
-                <ul class="list">
+                <ul class="list list-group">
                     <%for(var i in Users.nameList){
                     if(!Users.nameList[i].name)continue;
                     if(Users.nameList[i].name==Users.selfName)continue;%>
-                        <li class="user_id">
+                        <li class="user_id list-group-item">
                             <span class="userlist_name">
-                            <%=Users.nameList[i].name%></span><span class="more">...</span>
+                            <%=Users.nameList[i].name%></span><span class="badge">...</span>
                         </li>
                         <%}%>
                 </ul>
             </div>
             <div class="chat col-sm-8 col-sm-offset-4">
-                <div class="chat_box">
+                <div class="chat_box chat_box_old">
                     <div class="chat_box_header clearfix">
                         <a href="javascript:;" class="back"><span>‹</span>返回</a>
                         <h3 id="touser">快找人聊天吧。。。</h3>
+                        <a href="javascript:;" id="biggest" title="最大化"><span></span></a>
                     </div>
                     <div id="content">
                         <div id="showMsg">
@@ -71,6 +72,7 @@
                 <img src="" class="ab-center" id="check">
                 <button class="btn btn-primary">全屏</button>
             </div>
+        </div>
         </div>
 </body>
 <script type="text/javascript" src="/javascript/client.js"></script>

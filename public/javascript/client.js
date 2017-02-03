@@ -1,8 +1,38 @@
 $(document).ready(function() {
-    $("#github").on('click',function () {
-        window.open("https://github.com/zljs/chatRoom","_blank");
+    $("#github").on('click', function() {
+        window.open("https://github.com/zljs/chatRoom", "_blank");
     })
+    var boxH = $("body").innerHeight(),
+        boxW = $(".row").innerWidth();
+    $("#biggest").on('click', function() {
+        if ($(".chat_box").hasClass('chat_box_new')) {
 
+            $(".chat_header").slideDown(400);
+            $("#chat_list").show(400);
+            $(".chat_box").removeClass('chat_box_new').addClass('chat_box_old');
+            $(".chat_box_old").css({
+                "width": "85%",
+                "height": "90%",
+            });
+            $("#biggest>span").css({
+                "height":15+"px"
+            });
+        } else {
+            $(".chat_header").slideUp(400);
+
+
+            $("#chat_list").hide(400);
+
+            $(".chat_box").removeClass('chat_box_old').addClass('chat_box_new');
+            $(".chat_box_new").css({
+                "width": boxW + 'px',
+                "height": boxH + "px",
+            });
+            $("#biggest>span").css({
+                "height":0
+            });
+        };
+    })
     var fullPageBtn = $('button.btn');
 
     var self = $("#showselfname")[0].innerText.trim();
@@ -120,6 +150,8 @@ $(document).ready(function() {
         $("#touser").html(now_chat_list[now_chat_list.length - 1]);
         if (now_chat_list.length == 0) {
             $(".chat").hide();
+            $(".chat_header").show(400);
+            $("#chat_list").show(400);
         };
     });
     // 接收消息
@@ -127,9 +159,9 @@ $(document).ready(function() {
     socket.on('getMsg', function(newObj) {
             // console.log(newObj);
             msgArr.push(newObj);
-            var isW,newContent,isme,isto,section,
-            contentDiv = '',
-            usernameDiv = '';
+            var isW, newContent, isme, isto, section,
+                contentDiv = '',
+                usernameDiv = '';
 
             for (let i in msgArr) {
 
