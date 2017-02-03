@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var fullPageBtn = $('button.btn');
+
     var self = $("#showselfname")[0].innerText.trim();
     // console.log(self)
 
@@ -145,8 +147,8 @@ $(document).ready(function() {
             var contentDiv = '';
             if (isW) {
                 contentDiv = '<div>' + newContent + '</div>';
-            }else{
-contentDiv = '<div>' + '<img src="'+ newContent +'"/>' + '</div>'
+            } else {
+                contentDiv = '<div>' + '<img class="check" src="' + newContent + '"/>' + '</div>'
             };
             var usernameDiv = '';
             var section = $('<section class="clearfix"></section>');
@@ -194,42 +196,34 @@ contentDiv = '<div>' + '<img src="'+ newContent +'"/>' + '</div>'
                 $("#preview").on('click', function() {
                     $("#previewBox").hide();
                 })
+                fullPageBtn[0].addEventListener('click', function() {
+                    fullPage('#preview');
+
+                });
             }
             reader.readAsDataURL(this.files[0])
 
         })
-        /*$("#photo").on('change', function() {
-                var files = $("#photo")[0].files;
-                for (var i = 0; i < files.length; i++) {
-
-                    console.log(
-                        files[i])
-                    console.log(
-                        files[i].lastModifiedDate.toLocaleDateString());
-                    console.log(
-                        files[i].lastModifiedDate.toLocaleTimeString());
-                    console.log((files[i].size / 1024).toFixed(2));
-
-
-
-
-                }
-            })*/
-        // console.log(file)
 
 
     // 点击发送后的图片查看
     $("body").delegate('.check', 'click', function() {
             var img = $(this).attr("src");
-            $("#check").attr("src", img)
-            $("#scan").show().click(function() {
-                $(this).hide();
+            // console.log(img)
+            $("#check").attr("src", img);
+            $("#check").css("width", winH + 'px');
+            $("#scan").show();
+            $("#check").click(function() {
+                $("#scan").hide();
             })
+            fullPageBtn.on('click', function() {
+                fullPage('#check');
+
+            });
         })
         // 全屏预览图片
-    var fullPage = document.querySelector('button.btn');
-    fullPage.addEventListener('click', function() {
-        var elem = document.querySelector('#preview');
+    function fullPage(arg) {
+        var elem = $(arg)[0];
         if (elem.webkitRequestFullScreen) {
             elem.webkitRequestFullScreen();
         } else if (elem.mozRequestFullScreen) {
@@ -237,5 +231,5 @@ contentDiv = '<div>' + '<img src="'+ newContent +'"/>' + '</div>'
         } else if (elem.requestFullScreen) {
             elem.requestFullScreen();
         }
-    });
+    }
 });
