@@ -63,9 +63,20 @@ $(document).ready(function() {
 
     var now_chat_list = [];
     $('li').on('dblclick', function() {
-        /* socket.on('login', function(o) {
-             console.log(o);
-         });*/
+        if ($(".chat_box").hasClass('chat_box_new')) {
+
+            $(".chat_header").stop().slideDown(400);
+            $("#chat_list").stop().show(400);
+            $(".chat_box").removeClass('chat_box_new').addClass('chat_box_old');
+            $(".chat_box_old").css({
+                "width": "85%",
+                "height": "90%",
+            });
+            $("#biggest>span").css({
+                "height": 15 + "px"
+            });
+        }
+
 
         if ($(".chat").stop().hide) {
             $(".chat").stop().show();
@@ -157,9 +168,7 @@ $(document).ready(function() {
             $(".chat_header").stop().show(400);
             $("#chat_list").stop().show(400);
         };
-        $("li").on("dblclick", function() {
-            bigger();
-        })
+
     });
     // 接收消息
     var msgArr = [];
