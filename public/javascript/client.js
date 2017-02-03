@@ -5,23 +5,27 @@ $(document).ready(function() {
     var boxH = $("body").innerHeight(),
         boxW = $(".row").innerWidth();
     $("#biggest").on('click', function() {
+        bigger();
+    })
+
+    function bigger() {
         if ($(".chat_box").hasClass('chat_box_new')) {
 
-            $(".chat_header").slideDown(400);
-            $("#chat_list").show(400);
+            $(".chat_header").stop().slideDown(400);
+            $("#chat_list").stop().show(400);
             $(".chat_box").removeClass('chat_box_new').addClass('chat_box_old');
             $(".chat_box_old").css({
                 "width": "85%",
                 "height": "90%",
             });
             $("#biggest>span").css({
-                "height":15+"px"
+                "height": 15 + "px"
             });
         } else {
-            $(".chat_header").slideUp(400);
+            $(".chat_header").stop().slideUp(400);
 
 
-            $("#chat_list").hide(400);
+            $("#chat_list").stop().hide(400);
 
             $(".chat_box").removeClass('chat_box_old').addClass('chat_box_new');
             $(".chat_box_new").css({
@@ -29,10 +33,10 @@ $(document).ready(function() {
                 "height": boxH + "px",
             });
             $("#biggest>span").css({
-                "height":0
+                "height": 0
             });
         };
-    })
+    }
     var fullPageBtn = $('button.btn');
 
     var self = $("#showselfname")[0].innerText.trim();
@@ -63,8 +67,8 @@ $(document).ready(function() {
              console.log(o);
          });*/
 
-        if ($(".chat").hide) {
-            $(".chat").show();
+        if ($(".chat").stop().hide) {
+            $(".chat").stop().show();
         };
         $("#msg").val('');
         var touser = $(this).children('.userlist_name')[0].innerText;
@@ -92,7 +96,7 @@ $(document).ready(function() {
             // 点击后发送图片，隐藏预览
         $("#sendImg").on('click', function() {
             msg = $("#preview").attr("src");
-            $("#previewBox").hide();
+            $("#previewBox").stop().hide();
             send_img(msg);
 
         })
@@ -149,10 +153,13 @@ $(document).ready(function() {
         now_chat_list.pop();
         $("#touser").html(now_chat_list[now_chat_list.length - 1]);
         if (now_chat_list.length == 0) {
-            $(".chat").hide();
-            $(".chat_header").show(400);
-            $("#chat_list").show(400);
+            $(".chat").stop().hide();
+            $(".chat_header").stop().show(400);
+            $("#chat_list").stop().show(400);
         };
+        $("li").on("dblclick", function() {
+            bigger();
+        })
     });
     // 接收消息
     var msgArr = [];
