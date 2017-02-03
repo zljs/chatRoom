@@ -32,7 +32,7 @@ $(document).ready(function() {
         if ($(".chat").hide) {
             $(".chat").show();
         };
-
+        $("#msg").val('');
         var touser = $(this).children('.userlist_name')[0].innerText;
         socket.emit('newRoom', {
             'from': self,
@@ -59,24 +59,20 @@ $(document).ready(function() {
         $("#sendImg").on('click', function() {
             msg = $("#preview").attr("src");
             $("#previewBox").hide();
-            // console.log(msg)
-
             send_img(msg);
 
         })
         $("#msg").on('keydown', function(e) {
             msg = $("#msg").val();
-
             if (e.keyCode === 13) {
                 e.preventDefault();
                 send_msg(msg)
             };
         })
     });
-
+    // 发送图片
     function send_img(src) {
         if (src != '') {
-
             socket.emit('getMsg', {
                 'flag': 'img',
                 'from': self,
@@ -85,10 +81,9 @@ $(document).ready(function() {
             })
         };
     }
-
+    // 发送消息
     function send_msg(msg) {
         if (msg.trim() != '') {
-
             socket.emit('getMsg', {
                 'flag': 'word',
                 'from': self,
@@ -98,11 +93,11 @@ $(document).ready(function() {
         };
         $("#msg").val('').blur();
     }
-
-    function replace_em(str) { // 匹配表情字符
-        str = str.replace(/\</g, '&lt;');
-        str = str.replace(/\>/g, '&gt;');
-        str = str.replace(/\n/g, '<br/>');
+    // 匹配表情字符
+    function replace_em(str) {
+        // str = str.replace(/\</g, '&lt;');
+        // str = str.replace(/\>/g, '&gt;');
+        // str = str.replace(/\n/g, '<br/>');
         str = str.replace(/\[em_([0-9]*)\]/g, '<img src="images/face/$1.gif" border="0" />');
         return str;
     }
@@ -122,21 +117,8 @@ $(document).ready(function() {
         if (now_chat_list.length == 0) {
             $(".chat").hide();
         };
-        // console.log(now_chat_list);
-
-
     });
-    // socket.on('getChat', function(data, listRoom) { //如果广播到用户包含自己，则匹配聊天
-    //         console.log(data)
-    //     })
-    /*$("#send").on('click', function() {
-        var msg = $("#msg").val();
-        socket.emit('getMsg', {
-            from: self,
-            content: msg,
-            to: $("#touser").text()
-        })
-    })*/
+    // 接收消息
     socket.on('getMsg', function(newObj) {
             console.log(newObj)
             var isW = (newObj.flag === 'word') ? true : false;
@@ -146,9 +128,9 @@ $(document).ready(function() {
             var isto = (newObj.fromName === $("#touser").text()) ? true : false;
             var contentDiv = '';
             if (isW) {
-                contentDiv = '<div>' + newContent + '</div>';
+                contentDiv = '<div class="clearfix">' + newContent + '</div>';
             } else {
-                contentDiv = '<div>' + '<img class="check" src="' + newContent + '"/>' + '</div>'
+                contentDiv = '<div class="clearfix">' + '<img class="check" src="' + newContent + '"/>' + '</div>'
             };
             var usernameDiv = '';
             var section = $('<section class="clearfix"></section>');
@@ -188,22 +170,22 @@ $(document).ready(function() {
         })
         // 选择图片并预览
     $("#photo").on('change', function() {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $("#preview").attr("src", this.result);
-                $("#preview").css("width", winH + 'px');
-                $("#previewBox").hide().stop().fadeIn();
-                $("#preview").on('click', function() {
-                    $("#previewBox").hide();
-                })
-                fullPageBtn[0].addEventListener('click', function() {
-                    fullPage('#preview');
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $("#preview").attr("src", this.result);
+            $("#preview").css("width", winH + 'px');
+            $("#previewBox").hide().stop().fadeIn();
+            $("#preview").on('click', function() {
+                $("#previewBox").hide();
+            })
+            fullPageBtn[0].addEventListener('click', function() {
+                fullPage('#preview');
 
-                });
-            }
-            reader.readAsDataURL(this.files[0])
+            });
+        }
+        reader.readAsDataURL(this.files[0])
 
-        })
+    })
 
 
     // 点击发送后的图片查看

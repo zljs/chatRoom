@@ -287,6 +287,10 @@ li {
 .container .chat .chat_box .text .banner a.btn:hover {
   background-color: #204f96;
 }
+.container .chat .chat_box .text .banner #facebox {
+  width: 100%;
+  background: #fff;
+}
 .container .chat .chat_box .text .banner span {
   display: block;
   width: 48px;
