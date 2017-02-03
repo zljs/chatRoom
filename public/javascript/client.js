@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    $("#github").on('click',function () {
+        window.open("https://github.com/zljs/chatRoom","_blank");
+    })
+
     var fullPageBtn = $('button.btn');
 
     var self = $("#showselfname")[0].innerText.trim();
@@ -119,37 +123,44 @@ $(document).ready(function() {
         };
     });
     // 接收消息
+    var msgArr = [];
     socket.on('getMsg', function(newObj) {
-            console.log(newObj)
-            var isW = (newObj.flag === 'word') ? true : false;
+            // console.log(newObj);
+            msgArr.push(newObj);
+            var isW,newContent,isme,isto,section,
+            contentDiv = '',
+            usernameDiv = '';
 
-            var newContent = replace_em(newObj.content);
-            var isme = (newObj.fromName === self) ? true : false;
-            var isto = (newObj.fromName === $("#touser").text()) ? true : false;
-            var contentDiv = '';
-            if (isW) {
-                contentDiv = '<div class="clearfix">' + newContent + '</div>';
-            } else {
-                contentDiv = '<div class="clearfix">' + '<img class="check" src="' + newContent + '"/>' + '</div>'
-            };
-            var usernameDiv = '';
-            var section = $('<section class="clearfix"></section>');
-            if (isme) {
-                usernameDiv = '<span>' + newObj.fromName + '</span>';
-                section.addClass('user');
-                section.html(contentDiv + usernameDiv);
-            } else {
-                if (!isto) {
-                    if ($(".chat").hide) {
-                        $(".chat").show();
-                    };
-                    $("#touser").html(newObj.fromName);
-                    $("#showMsg").html('');
+            for (let i in msgArr) {
+
+                isW = (msgArr[i].flag === 'word') ? true : false;
+
+                newContent = replace_em(msgArr[i].content);
+                isme = (msgArr[i].fromName === self) ? true : false;
+                isto = (msgArr[i].fromName === $("#touser").text()) ? true : false;
+                if (isW) {
+                    contentDiv = '<div class="clearfix">' + newContent + '</div>';
+                } else {
+                    contentDiv = '<div class="clearfix">' + '<img class="check" src="' + newContent + '"/>' + '</div>'
                 };
-                usernameDiv = '<span>' + newObj.fromName + '</span>';
-                section.addClass('service');
-                section.html(usernameDiv + contentDiv);
-            };
+                section = $('<section class="clearfix"></section>');
+                if (isme) {
+                    usernameDiv = '<span>' + msgArr[i].fromName + '</span>';
+                    section.addClass('user');
+                    section.html(contentDiv + usernameDiv);
+                } else {
+                    if (!isto) {
+                        if ($(".chat").hide) {
+                            $(".chat").show();
+                        };
+                        $("#touser").html(msgArr[i].fromName);
+                        $("#showMsg").html('');
+                    };
+                    usernameDiv = '<span>' + msgArr[i].fromName + '</span>';
+                    section.addClass('service');
+                    section.html(usernameDiv + contentDiv);
+                };
+            }
             $("#showMsg").append(section)
             scrollBottom();
         })

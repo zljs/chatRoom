@@ -10,6 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>CChat</title>
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/plug/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/list.css" />
     <!--[if lt IE 8]><script src="./json3.min.js"></script><![endif]-->
@@ -21,11 +22,12 @@
 <body>
     <div class="container">
         <div class="row ">
-            <div class="chat_header ">
+            <div class="chat_header clearfix">
                 <span class="chatuser"><span id="showselfname">
                             <%=Users.selfName%>
                     </span> |
                 <a href="javascript:;" id="logout">退出</a></span>
+                <span class="github"><a href="javascript:;" id="github">GitHub</a></span>
             </div>
             <div id="chat_list" class="col-sm-3">
                 <ul class="list">

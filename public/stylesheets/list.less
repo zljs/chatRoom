@@ -63,11 +63,21 @@ li {
         padding: 0 30px;
         font: 600 20px/50px '黑体';
         color: @color;
-        a {
+        a#logout {
             color: #888;
             &:hover {
                 color: @color;
                 text-decoration: none;
+            }
+        }
+        span.github {
+            float: right;
+            a {
+                color: #333;
+                &:hover {
+                    color: #1695ed;
+                    text-decoration: none;
+                }
             }
         }
     }
@@ -149,8 +159,10 @@ li {
                 top: 0;
                 width: 100%;
                 height: 50px;
+                line-height: 50px;
                 background-color: @bg_color;
                 box-shadow: 0 5px 15px #888;
+                text-align: center;
                 z-index: 8;
                 a.back {
                     margin-left: 10px;
@@ -166,9 +178,7 @@ li {
                     }
                 }
                 h3#touser {
-                    color: @color;
-                    // display: block;
-                    text-align: center;
+                    color: #216ea3;
                 }
             }
             #content {
